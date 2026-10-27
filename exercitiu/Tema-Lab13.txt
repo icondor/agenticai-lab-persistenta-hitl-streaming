@@ -1,0 +1,53 @@
+TEMA LAB 13: OMUL POATE SCHIMBA PRIORITATEA
+============================================
+
+PROBLEMA
+Azi, cand graful se opreste la aprobare_oncall, omul de on-call are doua
+raspunsuri: "aprob" (escaladam) sau "resping" (prioritatea devine medie).
+In realitate vrea des o a treia varianta: «nu e urgent si nici medie, e joasa».
+Atunci raspunsul catre client trebuie sa aiba alt ton.
+
+CE CONSTRUITI
+Un nod aprobare_oncall care accepta trei raspunsuri:
+  aprob  -> escaladeaza, ca pana acum
+  medie  -> fara escaladare, prioritatea devine medie
+  joasa  -> fara escaladare, prioritatea devine joasa
+
+Graful NU se schimba. Inlocuiti doar nodul, cu asambleazaGraf din
+lib/triaj/graf-triaj.ts (scheletul o face deja pentru voi).
+
+DE UNDE PORNITI
+exercitiu/schelet.ts. Rulati cu:  pnpm tema:schelet
+
+CE FACETI
+TODO 1  Schema DecizieCuEditare: "aprob", "medie", "joasa".
+TODO 2  Nodul: pentru "medie" sau "joasa" intoarceti decizie: "resping",
+        triaj cu prioritatea aleasa si linia
+        "aprobare_oncall: prioritate schimbata in <prioritate>".
+TODO 3  Intrebarea din consola: acceptati cele trei valori si intrebati din
+        nou cat timp valoarea nu e valida (safeParse).
+
+DOVADA (cinci puncte, cu extrase din consola)
+1. Jurnalul pentru "joasa": linia aprobare_oncall cu prioritatea schimbata,
+   fara escaladeaza.
+2. Jurnalul pentru "aprob": escaladeaza apare, escaladat: true.
+3. Raspunsul catre client pentru "joasa" si pentru "aprob": tonul difera.
+   Explicati de ce (indiciu: tonPentru din graf-triaj.ts).
+4. De ce nodul intoarce decizie: "resping" si nu "joasa"? Ce ar trebui
+   schimbat in graf daca ati intoarce "joasa"?
+5. Unde ati pune un email catre client in nodul de aprobare: inainte sau
+   dupa interrupt()? De ce?
+
+BONUS
+Adaugati in pagina web (app/triaj/page.tsx) un al treilea buton,
+«Prioritate joasă». Atentie: si ruta (app/api/triaj/route.ts) valideaza
+decizia cu Zod, deci trebuie schimbata si acolo, iar graful din ruta trebuie
+construit cu nodul vostru.
+
+INDICII
+- Valoarea din Command({ resume: ... }) ajunge exact ca rezultat al lui
+  interrupt(). E input de la om: validati-o.
+- Daca uitati TODO 1, DecizieCuEditare.parse("joasa") arunca ZodError, iar
+  eroarea iese din invoke.
+- Rezolvarea: exercitiu/referinta.ts (pnpm tema). Uitati-va abia dupa ce
+  ati incercat.
