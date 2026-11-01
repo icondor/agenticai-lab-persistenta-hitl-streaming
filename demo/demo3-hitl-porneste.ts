@@ -29,19 +29,29 @@ import { creeazaCheckpointer, configThread } from "../lib/persistence";
 const threadId = process.argv[2] ?? "tichet-101";
 
 async function main() {
-  const graf = creeazaGrafTriaj(createModel(readProviderFromEnv()), creeazaCheckpointer());
+  const graf = creeazaGrafTriaj(
+    createModel(readProviderFromEnv()),
+    creeazaCheckpointer(),
+  );
 
   titlu(`DEMO 3: tichetul urgent, thread_id = ${threadId}`);
   console.log(`> ${TICHETE.urgent.text}\n`);
 
-  const r = await graf.invoke({ ticket: TICHETE.urgent.text }, configThread(threadId));
+  const r = await graf.invoke(
+    { ticket: TICHETE.urgent.text },
+    configThread(threadId),
+  );
 
   console.log("\nJURNAL pana acum:");
   for (const p of r.pasi) console.log(`  - ${p}`);
 
   if (!isInterrupted<CerereAprobare>(r)) {
-    console.log("\nModelul nu a clasificat tichetul ca urgent, deci graful nu s-a oprit.");
-    console.log("Comportamentul modelului variaza. Rulati din nou, cu alt thread_id.");
+    console.log(
+      "\nModelul nu a clasificat tichetul ca urgent, deci graful nu s-a oprit.",
+    );
+    console.log(
+      "Comportamentul modelului variaza. Rulati din nou, cu alt thread_id.",
+    );
     return;
   }
 
@@ -49,7 +59,9 @@ async function main() {
   const cerere = r[INTERRUPT][0].value as CerereAprobare;
   titlu("Graful s-a oprit. Asta vede omul de on-call:");
   console.log(`  ${cerere.intrebare}`);
-  console.log(`  categorie: ${cerere.categorie}, prioritate: ${cerere.prioritate}`);
+  console.log(
+    `  categorie: ${cerere.categorie}, prioritate: ${cerere.prioritate}`,
+  );
   console.log(`  rezumat:   ${cerere.rezumat}`);
   console.log(`\nStarea e salvata. Procesul se termina aici.`);
   console.log(`Decizia, din alt proces:  pnpm demo4 ${threadId}`);

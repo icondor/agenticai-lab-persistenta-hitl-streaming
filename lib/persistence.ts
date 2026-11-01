@@ -20,15 +20,19 @@ import { mkdirSync } from "node:fs";
 import { dirname } from "node:path";
 import { SqliteSaver } from "@langchain/langgraph-checkpoint-sqlite";
 
-export const FISIER_CHECKPOINTS = process.env.CHECKPOINT_DB ?? "date/checkpoints.sqlite";
+export const FISIER_CHECKPOINTS =
+  process.env.CHECKPOINT_DB ?? "date/checkpoints.sqlite";
 
 /** Un SqliteSaver peste fisierul proiectului. Creeaza folderul daca lipseste. */
-export function creeazaCheckpointer(fisier: string = FISIER_CHECKPOINTS): SqliteSaver {
+export function creeazaCheckpointer(
+  fisier: string = FISIER_CHECKPOINTS,
+): SqliteSaver {
   mkdirSync(dirname(fisier), { recursive: true });
   return SqliteSaver.fromConnString(fisier);
 }
 
 /** Config-ul unui thread. Acelasi thread_id = aceeasi conversatie, acelasi tichet. */
+// la aplicatii comerciale reale, thread_id-ul ar putea fi legat de un uuid generat pentru fiecare conversatie sau tichet.
 export function configThread(threadId: string) {
   return { configurable: { thread_id: threadId } };
 }
